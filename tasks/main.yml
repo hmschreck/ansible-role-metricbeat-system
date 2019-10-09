@@ -1,0 +1,8 @@
+---
+- name: Copy system.yml to location
+  template:
+    src: system.yml.j2
+    dest: "{{ metricbeat_config_dir }}/modules.d/system.yml"
+    owner: root
+  become: yes
+  notify: reload metricbeat

@@ -1,0 +1,17 @@
+---
+mb_base_period: 10s
+mb_cpu: true
+mb_load: true
+mb_memory: true
+mb_network: true
+mb_process: true
+mb_process_summary: true
+mb_socket_summary: true
+mb_entropy: false
+mb_core: false
+mb_diskio: false
+mb_socket: false
+mb_top_cpu: 5
+mb_top_memory: 5
+mb_disk_period: 1m
+mb_socket_period: 10s

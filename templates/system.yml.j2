@@ -1,0 +1,73 @@
+# Module: system
+# Docs: https://www.elastic.co/guide/en/beats/metricbeat/7.4/metricbeat-module-system.html
+
+- module: system
+  period: {{ mb_base_period }}
+  metricsets:
+{% if mb_cpu %}
+    - cpu
+{% endif %}
+{% if mb_load %}
+    - load
+{% endif %}
+{% if mb_memory %}
+    - memory
+{% endif %}
+{% if mb_network %}
+    - network
+{% endif %}
+{% if mb_process %}
+    - process
+{% endif %}
+{% if mb_process_summary %}
+    - process_summary
+{% endif %}
+{% if mb_socket_summary %}
+    - socket_summary
+{% endif %}
+{% if mb_entropy %}
+    - entropy
+{% endif %}
+{% if mb_core %}
+    - core
+{% endif %}
+{% if mb_diskio %}
+    - diskio
+{% endif %}
+{% if mb_socket and mb_socket_period == mb_base_period and ansible_os_family != "Darwin" %}
+    - socket
+{% endif %}
+  process.include_top_n:
+{% if mb_top_cpu > 0 %}
+    by_cpu: {{ mb_top_cpu }}
+{% endif %}
+{% if mb_top_memory > 0 %}
+    by_memory: {{ mb_top_memory }}
+{% endif %}
+
+{% if mb_socket and mb_socket_period != mb_base_period %}
+- module: system
+  period: {{ mb_socket_period }}
+  metricsets:
+    - socket
+{% endif %}
+
+- module: system
+  period: {{ mb_disk_period }}
+  metricsets:
+    - filesystem
+    - fsstat
+  processors:
+  - drop_event.when.regexp:
+      system.filesystem.mount_point: '^/(sys|cgroup|proc|dev|etc|host|lib)($|/)'
+
+- module: system
+  period: 15m
+  metricsets:
+    - uptime
+
+#- module: system
+#  period: 5m
+#  metricsets:
+#    - raid
+#  raid.mount_point: '/'
