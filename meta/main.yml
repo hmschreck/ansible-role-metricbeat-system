@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: metricbeat-system
   author: hmschreck
   description: Configure metricbeat system module
 
